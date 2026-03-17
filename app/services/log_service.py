@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app.models.log_entry import LogEntry
+from app.services.matching_service import check_log_for_matches
 
 
 def create_log_entry(db: Session, source_ip, domain, event_type: str, raw_message: str) -> LogEntry:
@@ -13,6 +14,9 @@ def create_log_entry(db: Session, source_ip, domain, event_type: str, raw_messag
     db.add(log_entry)
     db.commit()
     db.refresh(log_entry)
+
+    check_log_for_matches(db, log_entry)
+
     return log_entry
 
 

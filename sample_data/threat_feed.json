@@ -1,0 +1,20 @@
+[
+  {
+    "indicator_type": "ip",
+    "value": "185.220.101.1",
+    "source_name": "local_sample_feed",
+    "confidence_score": 90
+  },
+  {
+    "indicator_type": "ip",
+    "value": "103.27.202.88",
+    "source_name": "local_sample_feed",
+    "confidence_score": 75
+  },
+  {
+    "indicator_type": "domain",
+    "value": "malicious-example.net",
+    "source_name": "local_sample_feed",
+    "confidence_score": 85
+  }
+]

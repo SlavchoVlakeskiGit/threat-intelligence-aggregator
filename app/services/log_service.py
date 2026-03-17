@@ -1,3 +1,6 @@
+import json
+from pathlib import Path
+
 from sqlalchemy.orm import Session
 
 from app.models.log_entry import LogEntry
@@ -22,3 +25,27 @@ def create_log_entry(db: Session, source_ip, domain, event_type: str, raw_messag
 
 def list_log_entries(db: Session) -> list[LogEntry]:
     return db.query(LogEntry).order_by(LogEntry.id.desc()).all()
+
+
+def import_logs_from_file(db: Session, file_path: str) -> dict:
+    path = Path(file_path)
+
+    with path.open("r", encoding="utf-8") as file:
+        log_items = json.load(file)
+
+    imported_count = 0
+
+    for item in log_items:
+        create_log_entry(
+            db=db,
+            source_ip=item.get("source_ip"),
+            domain=item.get("domain"),
+            event_type=item["event_type"],
+            raw_message=item["raw_message"],
+        )
+        imported_count += 1
+
+    return {
+        "imported": imported_count,
+        "total": len(log_items),
+    }

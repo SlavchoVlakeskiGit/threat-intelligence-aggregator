@@ -5,6 +5,14 @@ from app.models.log_entry import LogEntry
 from app.services.alert_service import create_alert
 
 
+def get_severity_from_confidence(confidence_score: int) -> str:
+    if confidence_score >= 85:
+        return "high"
+    if confidence_score >= 60:
+        return "medium"
+    return "low"
+
+
 def check_log_for_matches(db: Session, log_entry: LogEntry):
     created_alerts = []
 
@@ -23,8 +31,11 @@ def check_log_for_matches(db: Session, log_entry: LogEntry):
                 db=db,
                 matched_value=log_entry.source_ip,
                 indicator_type="ip",
-                severity="high",
-                description=f"Log entry matched malicious IP indicator: {log_entry.source_ip}",
+                severity=get_severity_from_confidence(matched_ip.confidence_score),
+                description=(
+                    f"Log entry matched malicious IP indicator: {log_entry.source_ip} "
+                    f"(confidence: {matched_ip.confidence_score})"
+                ),
             )
             created_alerts.append(alert)
 
@@ -43,8 +54,11 @@ def check_log_for_matches(db: Session, log_entry: LogEntry):
                 db=db,
                 matched_value=log_entry.domain,
                 indicator_type="domain",
-                severity="high",
-                description=f"Log entry matched malicious domain indicator: {log_entry.domain}",
+                severity=get_severity_from_confidence(matched_domain.confidence_score),
+                description=(
+                    f"Log entry matched malicious domain indicator: {log_entry.domain} "
+                    f"(confidence: {matched_domain.confidence_score})"
+                ),
             )
             created_alerts.append(alert)
 

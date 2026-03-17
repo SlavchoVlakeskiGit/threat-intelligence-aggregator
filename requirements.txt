@@ -7,3 +7,4 @@ python-dotenv
 apscheduler
 pytest
 httpx
+cryptography

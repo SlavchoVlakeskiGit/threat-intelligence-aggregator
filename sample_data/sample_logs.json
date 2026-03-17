@@ -1,0 +1,20 @@
+[
+  {
+    "source_ip": "185.220.101.1",
+    "domain": null,
+    "event_type": "login_attempt",
+    "raw_message": "Failed admin login attempt from 185.220.101.1"
+  },
+  {
+    "source_ip": "8.8.8.8",
+    "domain": null,
+    "event_type": "login_attempt",
+    "raw_message": "User login attempt from 8.8.8.8"
+  },
+  {
+    "source_ip": null,
+    "domain": "malicious-example.net",
+    "event_type": "dns_query",
+    "raw_message": "DNS request for malicious-example.net detected"
+  }
+]

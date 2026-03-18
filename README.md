@@ -13,11 +13,11 @@ MySQL.
 
 Swagger API interface:
 
-![Swagger](docs/screenshots/swagger_api.png)
+![Swagger](docs/swagger_api.png)
 
 Example alert generated after log ingestion:
 
-![Alerts](docs/screenshots/alerts_example.png)
+![Alerts](docs/alerts_example.png)
 
 ------------------------------------------------------------------------
 

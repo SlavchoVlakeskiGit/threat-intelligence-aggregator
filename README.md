@@ -9,6 +9,18 @@ MySQL.
 
 ------------------------------------------------------------------------
 
+## API Preview
+
+Swagger API interface:
+
+![Swagger](docs/screenshots/swagger_api.png)
+
+Example alert generated after log ingestion:
+
+![Alerts](docs/screenshots/alerts_example.png)
+
+------------------------------------------------------------------------
+
 ## Architecture Overview
 
 Threat Feed JSON → Indicators Database → Log Ingestion → IOC Matching →

@@ -140,7 +140,7 @@ Activate the environment:
 
 **Windows**
 
-``` bash
+```cmd
 venv\Scripts\activate
 ```
 

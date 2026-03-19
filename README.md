@@ -1,3 +1,9 @@
+## Project Focus
+
+This project focuses on aggregating and correlating threat intelligence data from multiple sources.
+
+It emphasizes data ingestion and enrichment rather than log processing or API analytics.
+
 # Threat Intelligence Aggregator
 
 Backend service for ingesting threat intelligence feeds, processing
@@ -263,6 +269,12 @@ python -m pytest
 -   Web dashboard for alerts and indicators
 
 ------------------------------------------------------------------------
+
+## Why I Built This
+
+I built this project to strengthen my backend development skills and work with real-world scenarios such as authentication, data processing, and system design.
+
+The goal was to create something practical rather than a simple tutorial-based project.
 
 ## License
 

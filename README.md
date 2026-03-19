@@ -1,281 +1,116 @@
-## Project Focus
-
-This project focuses on external threat data aggregation and enrichment rather than internal log analysis.
-
-It emphasizes data ingestion and enrichment rather than log processing or API analytics.
-
 # Threat Intelligence Aggregator
 
-Backend service for ingesting threat intelligence feeds, processing
-logs, and generating alerts when malicious indicators are detected.
+A FastAPI backend project that imports threat indicators, stores them in MySQL, ingests log entries, and raises alerts when a log matches a known indicator.
 
-This project demonstrates a simplified **SOC (Security Operations
-Center) automation pipeline** implemented with Python, FastAPI, and
-MySQL.
+I built this to practice a backend workflow that is a bit more specific than a generic CRUD app: data ingestion, persistence, matching logic, and alert generation.
 
-------------------------------------------------------------------------
+## What it does
 
-## API Preview
+- imports threat indicators from JSON sample feeds
+- stores indicators in MySQL
+- accepts log entries through API endpoints
+- checks logs against stored indicators
+- creates alerts when a match is found
+- exposes endpoints for indicators, logs, alerts, and health checks
 
-Swagger API interface:
+## Tech stack
 
-![Swagger](docs/swagger_api.png)
+- Python
+- FastAPI
+- MySQL
+- SQLAlchemy
+- Pytest
 
-Example alert generated after log ingestion:
+## Why I built it
 
-![Alerts](docs/alerts_example.png)
+I wanted a project that sits between backend development and security.
 
-------------------------------------------------------------------------
+The goal was not to build a full SOC product. The goal was to show that I can model a workflow, break it into API endpoints and services, and implement the matching logic cleanly.
 
-## Architecture Overview
+## Architecture
 
-Threat Feed JSON → Indicators Database → Log Ingestion → IOC Matching →
-Alerts API
+```text
+Threat feed JSON -> Indicators table -> Log ingestion -> IOC matching -> Alerts
+```
 
-Workflow:
+## Project structure
 
-1.  Import threat indicators (malicious IPs and domains)
-2.  Store indicators in a MySQL database
-3.  Ingest log entries through the API or sample file
-4.  Compare logs against known indicators
-5.  Generate alerts when matches are detected
+```text
+threat-intelligence-aggregator/
+├── app/
+│   ├── api/
+│   ├── core/
+│   ├── db/
+│   ├── models/
+│   ├── schemas/
+│   └── services/
+├── docs/
+├── sample_data/
+├── tests/
+├── .env.example
+├── pytest.ini
+├── requirements.txt
+└── README.md
+```
 
-------------------------------------------------------------------------
+## Run locally
 
-## Features
+### 1. Clone the repo
 
--   Threat intelligence ingestion from JSON feeds
--   Log ingestion through REST API
--   Automatic IOC matching
--   Alert generation for malicious indicators
--   Confidence‑based severity scoring
--   MySQL database persistence
--   REST API built with FastAPI
--   Swagger API documentation
--   Sample data import for testing
--   Basic automated tests
-
-------------------------------------------------------------------------
-
-## Tech Stack
-
--   Python
--   FastAPI
--   MySQL
--   SQLAlchemy
--   PyMySQL
--   Pydantic
--   Uvicorn
--   Pytest
-
-------------------------------------------------------------------------
-
-## Project Structure
-
-    threat-intelligence-aggregator
-    │
-    ├── app
-    │   ├── api
-    │   │   ├── alerts.py
-    │   │   ├── health.py
-    │   │   ├── indicators.py
-    │   │   └── logs.py
-    │   │
-    │   ├── core
-    │   │   └── config.py
-    │   │
-    │   ├── db
-    │   │   ├── database.py
-    │   │   └── init_db.py
-    │   │
-    │   ├── models
-    │   │   ├── alert.py
-    │   │   ├── indicator.py
-    │   │   └── log_entry.py
-    │   │
-    │   ├── schemas
-    │   │   ├── alert.py
-    │   │   ├── indicator.py
-    │   │   └── log_entry.py
-    │   │
-    │   ├── services
-    │   │   ├── alert_service.py
-    │   │   ├── feed_service.py
-    │   │   ├── log_service.py
-    │   │   └── matching_service.py
-    │   │
-    │   └── main.py
-    │
-    ├── sample_data
-    │   ├── threat_feed.json
-    │   └── sample_logs.json
-    │
-    ├── tests
-    │   ├── test_health.py
-    │   ├── test_indicators.py
-    │   ├── test_logs.py
-    │   └── test_alerts.py
-    │
-    ├── docs
-    │   └── architecture.md
-    │
-    ├── requirements.txt
-    ├── pytest.ini
-    ├── .gitignore
-    ├── LICENSE
-    └── README.md
-
-------------------------------------------------------------------------
-
-## Setup
-
-Clone the repository:
-
-``` bash
-git clone https://github.com/SlavchoVlakeskiGit/Threat-Intelligence-Aggregator.git
+```bash
+git clone https://github.com/SlavchoVlakeskiGit/threat-intelligence-aggregator.git
 cd threat-intelligence-aggregator
 ```
 
-Create a virtual environment:
+### 2. Install dependencies
 
-``` bash
-python -m venv venv
-```
-
-Activate the environment:
-
-**Windows**
-
-```cmd
-venv\Scripts\activate
-```
-
-**Linux / macOS**
-
-``` bash
-source venv/bin/activate
-```
-
-Install dependencies:
-
-``` bash
+```bash
 pip install -r requirements.txt
 ```
 
-------------------------------------------------------------------------
+### 3. Configure the database
 
-## Database Setup
+Create a local MySQL database and update the connection string in your environment variables.
 
-Create the database and user:
+### 4. Start the API
 
-``` sql
-CREATE DATABASE threat_intel_db;
-
-CREATE USER 'threat_user'@'localhost' IDENTIFIED BY 'yourpassword';
-
-GRANT ALL PRIVILEGES ON threat_intel_db.* TO 'threat_user'@'localhost';
-
-FLUSH PRIVILEGES;
-```
-
-Create a `.env` file in the project root:
-
-``` env
-DATABASE_URL=mysql+pymysql://threat_user:yourpassword@127.0.0.1:3306/threat_intel_db
-APP_NAME=Threat Intelligence Aggregator
-APP_VERSION=1.0.0
-```
-
-Initialize the database tables:
-
-``` bash
-python -m app.db.init_db
-```
-
-------------------------------------------------------------------------
-
-## Running the API
-
-Start the server:
-
-``` bash
+```bash
 uvicorn app.main:app --reload
 ```
 
-Open the Swagger documentation:
+### 5. Open the docs
 
-    http://127.0.0.1:8000/docs
+Open `/docs` in the browser to test the endpoints.
 
-------------------------------------------------------------------------
+## Sample workflow
 
-## Example Workflow
+A typical flow in this project is:
 
-Import threat indicators:
+1. load indicator data
+2. store indicators in the database
+3. submit log entries
+4. compare logs against indicators
+5. review generated alerts
 
-    POST /api/indicators/import
+## What this repo is meant to show
 
-Import sample logs:
+This repo is strongest when it is framed as a backend practice project with a security-themed use case.
 
-    POST /api/logs/import
+It shows:
 
-Check generated alerts:
+- API design
+- database-backed application structure
+- service-layer logic
+- simple matching rules
+- tests and sample data
 
-    GET /api/alerts/
+## Useful next improvements
 
-If a log matches a malicious IP or domain from the threat feed, the
-system automatically generates an alert.
+- deduplication of repeated indicators
+- more explicit severity rules
+- better request/response examples in the README
+- clearer sample payloads for indicator and log ingestion
 
-------------------------------------------------------------------------
+## Notes
 
-## Example Alert
-
-``` json
-{
-  "matched_value": "185.220.101.1",
-  "indicator_type": "ip",
-  "severity": "high",
-  "description": "Log entry matched malicious IP indicator: 185.220.101.1 (confidence: 90)"
-}
-```
-
-------------------------------------------------------------------------
-
-## Limitations
-
--   Uses local sample JSON feeds instead of live threat intelligence
-    sources
--   Matching is currently exact-match only
--   Alert scoring is rule-based and simplified
--   API does not yet include authentication or rate limiting
-
-------------------------------------------------------------------------
-
-## Running Tests
-
-``` bash
-python -m pytest
-```
-
-------------------------------------------------------------------------
-
-## Future Improvements
-
--   Integration with real threat intelligence feeds
--   Scheduled feed ingestion
--   SIEM log ingestion pipelines
--   Authentication for protected endpoints
--   Indicator expiration and source weighting
--   Docker deployment
--   Web dashboard for alerts and indicators
-
-------------------------------------------------------------------------
-
-## Why I Built This
-
-I built this project to strengthen my backend development skills and work with real-world scenarios such as authentication, data processing, and system design.
-
-The goal was to create something practical rather than a simple tutorial-based project.
-
-## License
-
-MIT License
+Keep the wording grounded. This is a portfolio backend project with a security use case, not a commercial threat intel platform.

@@ -1,6 +1,6 @@
 ## Project Focus
 
-This project focuses on aggregating and correlating threat intelligence data from multiple sources.
+This project focuses on external threat data aggregation and enrichment rather than internal log analysis.
 
 It emphasizes data ingestion and enrichment rather than log processing or API analytics.
 

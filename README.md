@@ -1,8 +1,8 @@
 # Threat Intelligence Aggregator
 
-A FastAPI backend project that imports threat indicators, stores them in MySQL, ingests log entries, and raises alerts when a log matches a known indicator.
+A FastAPI backend for importing threat indicators, ingesting logs, and generating alerts when a log matches a known IOC.
 
-I built this to practice a backend workflow that is a bit more specific than a generic CRUD app: data ingestion, persistence, matching logic, and alert generation.
+I wanted a project that sits somewhere between backend development and security work, without making it overly complex.
 
 ## What it does
 
@@ -23,9 +23,9 @@ I built this to practice a backend workflow that is a bit more specific than a g
 
 ## Why I built it
 
-I wanted a project that sits between backend development and security.
+I wanted a project that sits somewhere between backend development and security work. It gave me a chance to model a full workflow instead of just building isolated endpoints.
 
-The goal was not to build a full SOC product. The goal was to show that I can model a workflow, break it into API endpoints and services, and implement the matching logic cleanly.
+The matching part was the most interesting part for me because it made the app feel less like plain data storage and more like an actual process with a purpose.
 
 ## Architecture
 
@@ -55,62 +55,33 @@ threat-intelligence-aggregator/
 
 ## Run locally
 
-### 1. Clone the repo
-
 ```bash
 git clone https://github.com/SlavchoVlakeskiGit/threat-intelligence-aggregator.git
 cd threat-intelligence-aggregator
-```
-
-### 2. Install dependencies
-
-```bash
 pip install -r requirements.txt
-```
-
-### 3. Configure the database
-
-Create a local MySQL database and update the connection string in your environment variables.
-
-### 4. Start the API
-
-```bash
 uvicorn app.main:app --reload
 ```
 
-### 5. Open the docs
+Before starting the API, create a local MySQL database and update the connection string in your environment variables.
 
 Open `/docs` in the browser to test the endpoints.
 
-## Sample workflow
+## Typical flow
 
-A typical flow in this project is:
-
-1. load indicator data
-2. store indicators in the database
-3. submit log entries
-4. compare logs against indicators
-5. review generated alerts
-
-## What this repo is meant to show
-
-This repo is strongest when it is framed as a backend practice project with a security-themed use case.
-
-It shows:
-
-- API design
-- database-backed application structure
-- service-layer logic
-- simple matching rules
-- tests and sample data
-
-## Useful next improvements
-
-- deduplication of repeated indicators
-- more explicit severity rules
-- better request/response examples in the README
-- clearer sample payloads for indicator and log ingestion
+1. load or import indicators
+2. ingest sample logs or events
+3. run matching logic
+4. review generated alerts
 
 ## Notes
 
-Keep the wording grounded. This is a portfolio backend project with a security use case, not a commercial threat intel platform.
+This is not meant to replace a SIEM or a full threat platform. I kept the project fairly contained on purpose so the ingestion and matching flow stays easy to understand.
+
+The matching logic started simple, but even that was enough to surface interesting patterns in the sample data.
+
+## Possible next improvements
+
+- scheduled feed refresh
+- indicator expiration handling
+- severity scoring
+- cleaner reporting endpoints
